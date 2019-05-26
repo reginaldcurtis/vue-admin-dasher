@@ -1,27 +1,89 @@
 <template>
-  <div class="container">
-    <div class="signup">
-      Don’t have a Rewards Genius account?
-      <router-link to="/request">Sign Up</router-link>
-    </div>
+  <div
+    class="container"
+    :class="{'light-background' : !isDarkMode, 'dark-background' : isDarkMode}"
+  >
+    <RequestAccount/>
     <div class="login">
-      <img src="@/assets/logo.svg">
-      <h4>Sign into Rewards Genius</h4>
-      <input type="email" placeholder="Email">
-      <input type="password" placeholder="Password">
+      <img src="@/assets/logo.svg" v-show="!isDarkMode">
+      <img src="@/assets/logo_white.svg" v-show="isDarkMode">
+      <h4 :class="{'light-text' : isDarkMode, 'dark-text' : !isDarkMode}">Sign into Rewards Genius</h4>
+      <input
+        type="email"
+        placeholder="Email"
+        :class="{'light-field' : !isDarkMode, 'dark-field' : isDarkMode}"
+      >
+      <input
+        type="password"
+        placeholder="Password"
+        :class="{'light-field' : !isDarkMode, 'dark-field' : isDarkMode}"
+      >
       <button>Sign In</button>
-      <router-link to="/recover">Forgot your password?</router-link>
+      <router-link
+        to="/recover"
+        :class="{'light-link' : isDarkMode, 'dark-link' : !isDarkMode}"
+      >Forgot your password?</router-link>
+      <ThemeSwitch/>
     </div>
   </div>
 </template>
 
 <script>
+import RequestAccount from "@/components/RequestAccount";
+import ThemeSwitch from "@/components/ThemeSwitch";
+
 export default {
-  name: "SignIn"
+  name: "SignIn",
+  components: {
+    RequestAccount,
+    ThemeSwitch
+  },
+  computed: {
+    isDarkMode() {
+      return this.$store.getters.isDarkMode;
+    }
+  },
+  methods: {
+    toggleDarkMode() {
+      this.$store.commit("toggleDarkMode");
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
+.light-background {
+  background-color: $light-grey;
+}
+.dark-background {
+  background-color: $dark-blue;
+}
+
+.light-text {
+  color: $white;
+}
+
+.dark-text {
+  color: $black;
+}
+
+.light-field {
+  background: rgba(255, 255, 255, 0.59);
+  border: 1px solid #dadada;
+
+  &::placeholder {
+    color: rgba(134, 140, 151, 0.6);
+  }
+}
+
+.dark-field {
+  background: rgba(134, 140, 151, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+}
 .container {
   display: flex;
   justify-content: center;
@@ -34,21 +96,8 @@ export default {
   width: 500px;
 }
 
-.signup {
-  position: absolute;
-  top: 40px;
-  right: 40px;
-
-  color: rgba(134, 140, 151, 0.6);
-
-  a {
-    color: #29a1b9;
-  }
-}
-
 h4 {
   font-size: 16px;
-  color: #333d46;
   text-align: center;
   font-weight: 500;
   margin-bottom: 24px;
@@ -75,6 +124,7 @@ input {
 button {
   background: #29a1b9;
   border-radius: 4px;
+  border-color: #29a1b9;
   font-size: 16px;
   font-weight: 600;
   color: white;
@@ -86,7 +136,13 @@ button {
 }
 
 a {
-  color: rgba(134, 140, 151, 0.6);
   text-decoration: none;
+}
+
+.light-link {
+  color: rgba(255, 255, 255, 0.3);
+}
+.dark-link {
+  color: $blue;
 }
 </style>
